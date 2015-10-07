@@ -1,0 +1,80 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+@section Head{
+    <style>
+        .matrix {
+            width: 600px;
+            height: 600px;
+            background-color: grey;
+        }
+
+        .cell-container {
+            width: 296px;
+            height: 296px;
+            border: 1px solid black;
+            float: left;
+            margin: 1px;
+        }
+
+        .red-cell {
+            background-color: #FF4D4D;
+        }
+
+        .white-cell {
+            background-color: white;
+        }
+    </style>
+}
+
+<h2>Index</h2>
+<div>
+    <span>Matrix</span>
+    <div class="matrix">
+        <div class="cell-container">
+            <div class="front red-cell">
+                <!-- front content -->
+            </div>
+            <div class="back white-cell">
+                <!-- back content -->
+            </div>
+        </div>
+        <div class="cell-container">
+            <div class="front red-cell">
+                <!-- front content -->
+            </div>
+            <div class="back white-cell">
+                <!-- back content -->
+            </div>
+        </div>
+        <div class="cell-container">
+            <div class="front red-cell">
+                <!-- front content -->
+            </div>
+            <div class="back white-cell">
+                <!-- back content -->
+            </div>
+        </div>
+        <div class="cell-container">
+            <div class="front red-cell">
+                <!-- front content -->
+            </div>
+            <div class="back white-cell">
+                <!-- back content -->
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts{
+    <script src="~/Scripts/jquery.flip.min.js"></script>
+    <script>
+        $(function () {
+            $(".cell-container").flip({
+                axis: "y", // y or x
+                trigger: "click", // click or hover
+                speed: 400
+            });
+        });
+    </script>
+}
