@@ -1,16 +1,21 @@
-﻿@{
+﻿@using MemoryMatrix.Models;
+@{
     ViewBag.Title = "Index";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    GameSession gameSession = ViewBag.gameSession;
+    Matrix matrix = ViewBag.matrix;
 }
 @section Head{
     <style>
+        .center {
+            margin-left: 26%;
+            margin-top: 10px;
+        }
         .matrix {
-            width: 600px;
-            height: 600px;
             background-color: grey;
         }
 
-        .cell-container {
+        .tile-container {
             width: 296px;
             height: 296px;
             border: 1px solid black;
@@ -18,49 +23,49 @@
             margin: 1px;
         }
 
-        .red-cell {
+        .red-tile {
             background-color: #FF4D4D;
         }
 
-        .white-cell {
+        .white-tile {
             background-color: white;
         }
     </style>
 }
 
 <h2>Index</h2>
-<div>
-    <span>Matrix</span>
-    <div class="matrix">
-        <div class="cell-container">
-            <div class="front red-cell">
+<div class="center">
+    <span>Matrix Level @gameSession.Level</span>
+    <div class="matrix" style="width:@(matrix.Width)px;height:@(matrix.Height)px">
+        <div class="tile-container">
+            <div class="front red-tile">
                 <!-- front content -->
             </div>
-            <div class="back white-cell">
+            <div class="back white-tile">
                 <!-- back content -->
             </div>
         </div>
-        <div class="cell-container">
-            <div class="front red-cell">
+        <div class="tile-container">
+            <div class="front red-tile">
                 <!-- front content -->
             </div>
-            <div class="back white-cell">
+            <div class="back white-tile">
                 <!-- back content -->
             </div>
         </div>
-        <div class="cell-container">
-            <div class="front red-cell">
+        <div class="tile-container">
+            <div class="front red-tile">
                 <!-- front content -->
             </div>
-            <div class="back white-cell">
+            <div class="back white-tile">
                 <!-- back content -->
             </div>
         </div>
-        <div class="cell-container">
-            <div class="front red-cell">
+        <div class="tile-container">
+            <div class="front red-tile">
                 <!-- front content -->
             </div>
-            <div class="back white-cell">
+            <div class="back white-tile">
                 <!-- back content -->
             </div>
         </div>
@@ -70,7 +75,7 @@
     <script src="~/Scripts/jquery.flip.min.js"></script>
     <script>
         $(function () {
-            $(".cell-container").flip({
+            $(".tile-container").flip({
                 axis: "y", // y or x
                 trigger: "click", // click or hover
                 speed: 400
