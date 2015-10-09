@@ -10,5 +10,7 @@ namespace MemoryMatrix.Models
         public double Height { get; set; }
         public double Width { get; set; }
         public int NoOfTiles { get; set; }
+        public double CellHeight { get; set; }
+        public double CellWidth { get; set; }
     }
 }

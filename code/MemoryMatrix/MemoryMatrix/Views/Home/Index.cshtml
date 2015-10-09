@@ -11,13 +11,14 @@
             margin-left: 26%;
             margin-top: 10px;
         }
+
         .matrix {
             background-color: grey;
         }
 
         .tile-container {
-            width: 296px;
-            height: 296px;
+            /*width: 296px;
+            height: 296px;*/
             border: 1px solid black;
             float: left;
             margin: 1px;
@@ -37,38 +38,17 @@
 <div class="center">
     <span>Matrix Level @gameSession.Level</span>
     <div class="matrix" style="width:@(matrix.Width)px;height:@(matrix.Height)px">
-        <div class="tile-container">
-            <div class="front red-tile">
-                <!-- front content -->
+        @for (int i = 0; i < matrix.NoOfTiles; i++)
+        {
+            <div class="tile-container" id="container-@(i+1)" style="width:@(matrix.CellWidth)px;height:@(matrix.CellHeight)px">
+                <div class="front red-tile">
+                    <!-- front content -->
+                </div>
+                <div class="back white-tile">
+                    <!-- back content -->
+                </div>
             </div>
-            <div class="back white-tile">
-                <!-- back content -->
-            </div>
-        </div>
-        <div class="tile-container">
-            <div class="front red-tile">
-                <!-- front content -->
-            </div>
-            <div class="back white-tile">
-                <!-- back content -->
-            </div>
-        </div>
-        <div class="tile-container">
-            <div class="front red-tile">
-                <!-- front content -->
-            </div>
-            <div class="back white-tile">
-                <!-- back content -->
-            </div>
-        </div>
-        <div class="tile-container">
-            <div class="front red-tile">
-                <!-- front content -->
-            </div>
-            <div class="back white-tile">
-                <!-- back content -->
-            </div>
-        </div>
+        }
     </div>
 </div>
 @section scripts{

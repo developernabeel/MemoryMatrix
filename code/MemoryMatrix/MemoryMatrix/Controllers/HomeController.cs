@@ -1,4 +1,5 @@
-﻿using MemoryMatrix.Models;
+﻿using MemoryMatrix.Constants;
+using MemoryMatrix.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -33,9 +34,11 @@ namespace MemoryMatrix.Controllers
         private Matrix CalculateMatrix(GameSession gameSession)
         {
             var matrix = new Matrix();
-            matrix.Height = 600; // Hardcoded for now.
-            matrix.Width = 600; // Harcoded for now.
+            matrix.Height = Dimensions.INITIAL_MATRIX_HEIGHT; // Hardcoded for now.
+            matrix.Width = Dimensions.INITIAL_MATRIX_WIDTH; // Harcoded for now.
             matrix.NoOfTiles = (int)Math.Pow(2 + gameSession.Level, 2);
+            matrix.CellHeight = Dimensions.INITIAL_CELL_HEIGHT - ((gameSession.Level - 1) * 50);
+            matrix.CellWidth = Dimensions.INITIAL_CELL_WIDTH - ((gameSession.Level - 1) * 50);
             return matrix;
         }
     }
