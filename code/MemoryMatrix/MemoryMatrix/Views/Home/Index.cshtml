@@ -138,7 +138,7 @@
             var calculateGreenTiles = function() {
                 var greenTileArray = [];
                 while (greenTileArray.length != totalGreenTile) {
-                    var randomInt = getRandomInt(0, (noOfTiles + 1));
+                    var randomInt = getRandomInt(0, noOfTiles);
                     if(greenTileArray.indexOf(randomInt)== -1){
                         greenTileArray.push(randomInt);
                     }
