@@ -40,8 +40,8 @@
     <div class="matrix" style="width:@(matrix.Width)px;height:@(matrix.Height)px">
         @for (int i = 0; i < matrix.NoOfTiles; i++)
         {
-            <div class="tile-container" id="container-@(i+1)" style="width:@(matrix.CellWidth)px;height:@(matrix.CellHeight)px">
-                <div class="front red-tile">
+            <div class="tile-container" id="container-@(i+1)" data-tilenumber="@i" style="width:@(matrix.CellWidth)px;height:@(matrix.CellHeight)px">
+                <div class="front white-tile">
                     <!-- front content -->
                 </div>
                 <div class="back white-tile">
@@ -54,12 +54,96 @@
 @section scripts{
     <script src="~/Scripts/jquery.flip.min.js"></script>
     <script>
+        // Global variable
+        var currentLevel = @gameSession.Level;
+        var noOfTiles = @matrix.NoOfTiles;
+
         $(function () {
             $(".tile-container").flip({
                 axis: "y", // y or x
                 trigger: "click", // click or hover
                 speed: 400
             });
+
+            MemoryMatrix.Init.arrangeTiles();
+            MemoryMatrix.Init.showTiles();
         });
+
+        var MemoryMatrix = MemoryMatrix || {};
+
+        MemoryMatrix.Store = function(){
+            // Private
+            var redTileArray;
+            var showTileInitialDelay = 1;
+            var showTileDuration = 2 + Math.floor(currentLevel /4);
+
+            // Public
+            return {
+
+                getRedTileArray : function(){
+                    return redTileArray;
+                },
+                setRedTileArray : function(array){
+                    redTileArray = array;
+                },
+
+                getShowTileInitialDelay : function(){
+                    return showTileInitialDelay * 1000;
+                },
+                getShowTileDuration : function(){
+                    return (showTileInitialDelay + showTileDuration) * 1000;
+                }
+            };
+        }();
+
+        MemoryMatrix.Init = function(){
+            // Private
+            var totalRedTile = Math.floor(noOfTiles/2) + 1;
+            
+            var getRandomInt = function (min, max) {
+                return Math.floor(Math.random() * (max - min)) + min;
+            }
+
+            var calculateRedTiles = function() {
+                var redTileArray = [];
+                while (redTileArray.length != totalRedTile) {
+                    var randomInt = getRandomInt(0, (noOfTiles + 1));
+                    if(redTileArray.indexOf(randomInt)== -1){
+                        redTileArray.push(randomInt);
+                    }
+                }
+                MemoryMatrix.Store.setRedTileArray(redTileArray);
+            };
+
+            var addRedTiles = function() {
+                $('.tile-container').each(function(index,val){
+                    var self = $(this);
+                    var tileNumber = parseInt(self.attr('data-tilenumber'));
+                    var redTileArray = MemoryMatrix.Store.getRedTileArray();
+                    if(redTileArray.indexOf(tileNumber)!=-1){
+                        self.addClass('hasRt');
+                        self.find('.back').removeClass('white-tile').addClass('red-tile');
+                    }
+                });
+            };
+
+            // Public
+            return {
+                arrangeTiles : function(){
+                    calculateRedTiles();
+                    addRedTiles();
+                },
+
+                showTiles : function() {
+                    setTimeout(function() {
+                        $('.hasRt').flip(true);
+                    }, MemoryMatrix.Store.getShowTileInitialDelay());
+
+                    setTimeout(function() {
+                        $('.hasRt').flip(false);
+                    }, MemoryMatrix.Store.getShowTileDuration());
+                }
+            };
+        }();
     </script>
 }

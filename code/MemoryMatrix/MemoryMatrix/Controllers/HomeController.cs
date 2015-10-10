@@ -34,11 +34,16 @@ namespace MemoryMatrix.Controllers
         private Matrix CalculateMatrix(GameSession gameSession)
         {
             var matrix = new Matrix();
-            matrix.Height = Dimensions.INITIAL_MATRIX_HEIGHT; // Hardcoded for now.
-            matrix.Width = Dimensions.INITIAL_MATRIX_WIDTH; // Harcoded for now.
-            matrix.NoOfTiles = (int)Math.Pow(2 + gameSession.Level, 2);
-            matrix.CellHeight = Dimensions.INITIAL_CELL_HEIGHT - ((gameSession.Level - 1) * 50);
-            matrix.CellWidth = Dimensions.INITIAL_CELL_WIDTH - ((gameSession.Level - 1) * 50);
+            int tilesPerRow = (2 + (int)Math.Ceiling((gameSession.Level / 2.0)));
+
+            // Matrix height is calculated as Initial Height + 1px border and 1px margin on both side horizontally of each cell.
+            matrix.Height = Dimensions.INITIAL_MATRIX_HEIGHT + (tilesPerRow * 4);
+            // Matrix height is calculated as Initial Width + 1px border and 1px margin on both size vertically of each cell.
+            matrix.Width = Dimensions.INITIAL_MATRIX_WIDTH + (tilesPerRow * 4);
+            matrix.NoOfTiles = (int)Math.Pow(tilesPerRow, 2);
+
+            matrix.CellHeight = Dimensions.INITIAL_MATRIX_HEIGHT / (((int)Math.Ceiling((gameSession.Level / 2.0)) - 1) + 3);
+            matrix.CellWidth = Dimensions.INITIAL_MATRIX_WIDTH / (((int)Math.Ceiling((gameSession.Level / 2.0)) - 1) + 3);
             return matrix;
         }
     }
