@@ -24,6 +24,10 @@
             margin: 1px;
         }
 
+        .green-tile {
+            background-color: #68d26a;
+        }
+
         .red-tile {
             background-color: #FF4D4D;
         }
@@ -37,14 +41,14 @@
 <h2>Index</h2>
 <div class="center">
     <span>Matrix Level @gameSession.Level</span>
-    <div class="matrix" style="width:@(matrix.Width)px;height:@(matrix.Height)px">
+    <div id="matrix-div" class="matrix" style="width:@(matrix.Width)px;height:@(matrix.Height)px">
         @for (int i = 0; i < matrix.NoOfTiles; i++)
         {
-            <div class="tile-container" id="container-@(i+1)" data-tilenumber="@i" style="width:@(matrix.CellWidth)px;height:@(matrix.CellHeight)px">
+            <div class="tile-container clickable" id="container-@(i+1)" data-tilenumber="@i" style="width:@(matrix.CellWidth)px;height:@(matrix.CellHeight)px">
                 <div class="front white-tile">
                     <!-- front content -->
                 </div>
-                <div class="back white-tile">
+                <div class="back red-tile">
                     <!-- back content -->
                 </div>
             </div>
@@ -61,8 +65,18 @@
         $(function () {
             $(".tile-container").flip({
                 axis: "y", // y or x
-                trigger: "click", // click or hover
+                trigger: "manual", // click or hover
                 speed: 400
+            });
+
+            $('#matrix-div').on('click','.clickable',function() {
+                if(MemoryMatrix.Store.getEnableClick()){
+                    var self = $(this);
+                    self.flip(true);
+                    self.removeClass('clickable');
+                    var id = self.attr('id');
+                    MemoryMatrix.Game.CheckCorrectPattern(id);
+                }
             });
 
             MemoryMatrix.Init.arrangeTiles();
@@ -73,18 +87,28 @@
 
         MemoryMatrix.Store = function(){
             // Private
-            var redTileArray;
+            var greenTileArray;
+            var selectionArray = [];
+
             var showTileInitialDelay = 1;
-            var showTileDuration = 2 + Math.floor(currentLevel /4);
+            var showTileDuration = 2 + Math.floor(currentLevel /2);
+            var enableClick = false;
 
             // Public
             return {
 
-                getRedTileArray : function(){
-                    return redTileArray;
+                getGreenTileArray : function(){
+                    return greenTileArray;
                 },
-                setRedTileArray : function(array){
-                    redTileArray = array;
+                setGreenTileArray : function(array){
+                    greenTileArray = array;
+                },
+
+                getSelectionArray : function(){
+                    return selectionArray;
+                },
+                setSelectionArray : function(array){
+                    selectionArray = array;
                 },
 
                 getShowTileInitialDelay : function(){
@@ -92,37 +116,44 @@
                 },
                 getShowTileDuration : function(){
                     return (showTileInitialDelay + showTileDuration) * 1000;
+                },
+
+                getEnableClick : function(){
+                    return enableClick;
+                },
+                setEnableClick : function(value){
+                    enableClick = value;
                 }
             };
         }();
 
         MemoryMatrix.Init = function(){
             // Private
-            var totalRedTile = Math.floor(noOfTiles/2) + 1;
-            
+            var totalGreenTile = Math.floor(noOfTiles/2) + 1;
+
             var getRandomInt = function (min, max) {
                 return Math.floor(Math.random() * (max - min)) + min;
             }
 
-            var calculateRedTiles = function() {
-                var redTileArray = [];
-                while (redTileArray.length != totalRedTile) {
+            var calculateGreenTiles = function() {
+                var greenTileArray = [];
+                while (greenTileArray.length != totalGreenTile) {
                     var randomInt = getRandomInt(0, (noOfTiles + 1));
-                    if(redTileArray.indexOf(randomInt)== -1){
-                        redTileArray.push(randomInt);
+                    if(greenTileArray.indexOf(randomInt)== -1){
+                        greenTileArray.push(randomInt);
                     }
                 }
-                MemoryMatrix.Store.setRedTileArray(redTileArray);
+                MemoryMatrix.Store.setGreenTileArray(greenTileArray);
             };
 
-            var addRedTiles = function() {
+            var addGreenTiles = function() {
                 $('.tile-container').each(function(index,val){
                     var self = $(this);
                     var tileNumber = parseInt(self.attr('data-tilenumber'));
-                    var redTileArray = MemoryMatrix.Store.getRedTileArray();
-                    if(redTileArray.indexOf(tileNumber)!=-1){
+                    var greenTileArray = MemoryMatrix.Store.getGreenTileArray();
+                    if(greenTileArray.indexOf(tileNumber)!=-1){
                         self.addClass('hasRt');
-                        self.find('.back').removeClass('white-tile').addClass('red-tile');
+                        self.find('.back').removeClass('red-tile').addClass('green-tile');
                     }
                 });
             };
@@ -130,18 +161,51 @@
             // Public
             return {
                 arrangeTiles : function(){
-                    calculateRedTiles();
-                    addRedTiles();
+                    calculateGreenTiles();
+                    addGreenTiles();
                 },
 
                 showTiles : function() {
+                    // Initial delay before showing tiles.
                     setTimeout(function() {
                         $('.hasRt').flip(true);
                     }, MemoryMatrix.Store.getShowTileInitialDelay());
 
+                    // Hide tiles again.
                     setTimeout(function() {
                         $('.hasRt').flip(false);
+                        // Enable clicking on matrix.
+                        MemoryMatrix.Store.setEnableClick(true);
                     }, MemoryMatrix.Store.getShowTileDuration());
+                }
+            };
+        }();
+
+        MemoryMatrix.Game = function(){
+            // Private
+
+            // Public
+            return {
+                CheckCorrectPattern : function(selectedTileId) {
+                    var selectedTile = $('#'+selectedTileId);
+                    // Wrong answer
+                    if(selectedTile.find('.green-tile').length == 0){
+                        MemoryMatrix.Store.setEnableClick(false);
+                        alert('Wrong selection!!!');
+                    }
+                    else {
+                        var selectionArray = MemoryMatrix.Store.getSelectionArray();
+                        var totalGreenTiles = MemoryMatrix.Store.getGreenTileArray().length;
+                        var tileNumber = parseInt(selectedTile.attr('data-tilenumber'));
+                        selectionArray.push(tileNumber);
+                        if(selectionArray.length >= totalGreenTiles){
+                            alert('Level completed');
+                            MemoryMatrix.Store.setEnableClick(false);
+                        }
+                        else{
+                            MemoryMatrix.Store.setSelectionArray(selectionArray);
+                        }
+                    }
                 }
             };
         }();
