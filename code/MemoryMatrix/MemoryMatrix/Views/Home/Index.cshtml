@@ -35,10 +35,31 @@
         .white-tile {
             background-color: white;
         }
+
+        .failure-message {
+            color : red;
+        }
+
+        .success-message {
+            color : blue;
+        }
+
+        .message-container{
+            width:510px;
+            margin-top:15px;
+            overflow : hidden;
+            text-align : center;
+        }
+
+        span#message {
+            font-size: 20px;
+            font-family: cursive;
+            display: inline-block;
+        }
     </style>
 }
 
-<h2>Index</h2>
+<h2>Memory Matrix</h2>
 <div class="center">
     <span>Matrix Level @gameSession.Level</span>
     <div id="matrix-div" class="matrix" style="width:@(matrix.Width)px;height:@(matrix.Height)px">
@@ -53,6 +74,9 @@
                 </div>
             </div>
         }
+    </div>
+    <div class="message-container">
+        <span id="message" style="display:none"></span>
     </div>
 </div>
 @section scripts{
@@ -191,7 +215,7 @@
                     // Wrong answer
                     if(selectedTile.find('.green-tile').length == 0){
                         MemoryMatrix.Store.setEnableClick(false);
-                        alert('Wrong selection!!!');
+                        MemoryMatrix.Game.ShowMessage('Wrong selection!!!', true);
                     }
                     else {
                         var selectionArray = MemoryMatrix.Store.getSelectionArray();
@@ -199,13 +223,33 @@
                         var tileNumber = parseInt(selectedTile.attr('data-tilenumber'));
                         selectionArray.push(tileNumber);
                         if(selectionArray.length >= totalGreenTiles){
-                            alert('Level completed');
+                            MemoryMatrix.Game.ShowMessage('Level completed',false);
                             MemoryMatrix.Store.setEnableClick(false);
                         }
                         else{
                             MemoryMatrix.Store.setSelectionArray(selectionArray);
                         }
                     }
+                },
+
+                ShowMessage : function(message, isFailure) {
+                    var msgSpan = $('#message');
+                    msgSpan.text(message);
+                    if(isFailure)
+                        msgSpan.addClass('failure-message');
+                    else
+                        msgSpan.addClass('success-message');
+                    
+                    msgSpan.fadeIn(1000);
+                    setTimeout(MemoryMatrix.Game.HideMessage,5000);
+                },
+
+                HideMessage : function() {
+                    var msgSpan = $('#message');
+                    msgSpan.fadeOut(1000);
+                    msgSpan.text('');
+                    msgSpan.removeClass('failure-message');
+                    msgSpan.removeClass('success-message');
                 }
             };
         }();
