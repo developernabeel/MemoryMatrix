@@ -59,3 +59,56 @@ textarea {
 .validation-summary-valid {
     display: none;
 }
+
+/* Custom style
+-----------------------------------------------------------*/
+
+.center {
+    margin-left: 26%;
+    margin-top: 10px;
+}
+
+.matrix {
+    background-color: grey;
+}
+
+.tile-container {
+    /*width: 296px;
+            height: 296px;*/
+    border: 1px solid black;
+    float: left;
+    margin: 1px;
+}
+
+.green-tile {
+    background-color: #68d26a;
+}
+
+.red-tile {
+    background-color: #FF4D4D;
+}
+
+.white-tile {
+    background-color: white;
+}
+
+.failure-message {
+    color: red;
+}
+
+.success-message {
+    color: blue;
+}
+
+.message-container {
+    width: 510px;
+    margin-top: 15px;
+    overflow: hidden;
+    text-align: center;
+}
+
+span#message {
+    font-size: 20px;
+    font-family: cursive;
+    display: inline-block;
+}

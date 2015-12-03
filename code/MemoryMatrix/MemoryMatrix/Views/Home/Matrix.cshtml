@@ -6,58 +6,27 @@
     Matrix matrix = ViewBag.matrix;
 }
 @section Head{
-    <style>
-        .center {
-            margin-left: 26%;
-            margin-top: 10px;
-        }
-
-        .matrix {
-            background-color: grey;
-        }
-
-        .tile-container {
-            /*width: 296px;
-            height: 296px;*/
-            border: 1px solid black;
-            float: left;
-            margin: 1px;
-        }
-
-        .green-tile {
-            background-color: #68d26a;
-        }
-
-        .red-tile {
-            background-color: #FF4D4D;
-        }
-
-        .white-tile {
-            background-color: white;
-        }
-
-        .failure-message {
-            color : red;
-        }
-
-        .success-message {
-            color : blue;
-        }
-
-        .message-container{
-            width:510px;
-            margin-top:15px;
-            overflow : hidden;
-            text-align : center;
-        }
-
-        span#message {
-            font-size: 20px;
-            font-family: cursive;
-            display: inline-block;
-        }
-    </style>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/Bootstrap/bootstrap.min.css" rel="stylesheet" />
 }
+<!-- Bootstrap modal -->
+<div id="message-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title"><span id="modal-title"></span></h4>
+            </div>
+            <div class="modal-body">
+                <p id="modal-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- End Bootstrap modal -->
 
 <h2>Memory Matrix</h2>
 <div class="center">
@@ -80,6 +49,7 @@
     </div>
 </div>
 @section scripts{
+    <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/jquery.flip.min.js"></script>
     <script>
         // Global variable
@@ -91,6 +61,11 @@
                 axis: "y", // y or x
                 trigger: "manual", // click or hover
                 speed: 400
+            });
+
+            $('#message-modal').modal({
+                show : false,
+                keyboard: true
             });
 
             $('#matrix-div').on('click','.clickable',function() {
@@ -237,8 +212,8 @@
                     if(selectedTile.find('.green-tile').length == 0){
                         MemoryMatrix.Store.setEnableClick(false);
                         MemoryMatrix.Game.ShowMessage('Wrong selection!!!', true);
-                        alert('Game over!!!');
-                        location.href = '@Url.Action("index","home")';
+                        MemoryMatrix.Game.ShowModal('Game Over','You have played till '+currentLevel+ ' Level, well played!!!');
+                        MemoryMatrix.Store.setEnableClick(false);
                     }
                     else {
                         var selectionArray = MemoryMatrix.Store.getSelectionArray();
@@ -247,7 +222,7 @@
                         selectionArray.push(tileNumber);
 
                         if(selectionArray.length >= totalGreenTiles){
-                            MemoryMatrix.Game.ShowMessage('Level completed',false);
+                            MemoryMatrix.Game.ShowMessage('Level '+currentLevel+' completed',false);
                             MemoryMatrix.Store.setEnableClick(false);
                             setTimeout(function(){changeLevel(currentLevel + 1);},MemoryMatrix.Store.getShowMessageDuration());
                         }
@@ -275,6 +250,12 @@
                     //msgSpan.text('');
                     msgSpan.removeClass('failure-message');
                     msgSpan.removeClass('success-message');
+                },
+
+                ShowModal : function(title, message){
+                    $('#modal-title').text(title);
+                    $('#modal-message').text(message);
+                    $('#message-modal').modal('show');
                 }
             };
         }();
