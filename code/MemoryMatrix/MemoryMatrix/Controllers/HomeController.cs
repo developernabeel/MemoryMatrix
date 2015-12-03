@@ -10,10 +10,15 @@ namespace MemoryMatrix.Controllers
 {
     public class HomeController : Controller
     {
-        //
-        // GET: /Home/
-
+        [HttpGet]
         public ActionResult Index()
+        {
+            Session.Abandon();
+            return View();
+        }
+
+        [HttpGet]
+        public ActionResult Matrix()
         {
             GameSession gameSession;
             if (Session["GameSession"] != null)
@@ -31,6 +36,16 @@ namespace MemoryMatrix.Controllers
             return View();
         }
 
+        [HttpPost]
+        public ActionResult ChangeLevel(int level)
+        {
+            var gameSession = (GameSession)Session["GameSession"];
+            gameSession.Level = level;
+            Session["GameSession"] = gameSession;
+            return Json(null, JsonRequestBehavior.AllowGet);
+        }
+
+        [NonAction]
         private Matrix CalculateMatrix(GameSession gameSession)
         {
             var matrix = new Matrix();
