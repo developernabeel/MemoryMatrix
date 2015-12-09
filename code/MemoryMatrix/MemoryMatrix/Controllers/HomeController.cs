@@ -42,7 +42,7 @@ namespace MemoryMatrix.Controllers
             var gameSession = (GameSession)Session["GameSession"];
             gameSession.Level = level;
             Session["GameSession"] = gameSession;
-            return Json(null, JsonRequestBehavior.AllowGet);
+            return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
         [NonAction]

@@ -29,6 +29,7 @@
 <!-- End Bootstrap modal -->
 
 <h2>Memory Matrix</h2>
+@Html.ActionLink("Menu", "Index", "Home")
 <div class="center">
     <h4>Level : @gameSession.Level</h4>
     <div id="matrix-div" class="matrix" style="width:@(matrix.Width)px;height:@(matrix.Height)px">
@@ -64,17 +65,17 @@
             });
 
             $('#message-modal').modal({
-                show : false,
+                show: false,
                 keyboard: true
             });
 
-            $('#matrix-div').on('click','.clickable',function() {
-                if(MemoryMatrix.Store.getEnableClick()){
+            $('#matrix-div').on('click', '.clickable', function () {
+                if (MemoryMatrix.Store.getEnableClick()) {
                     var self = $(this);
                     self.flip(true);
                     self.removeClass('clickable');
                     var id = self.attr('id');
-                    MemoryMatrix.Game.CheckCorrectPattern(id);
+                    setTimeout(function() { MemoryMatrix.Game.CheckCorrectPattern(id); }, 400);
                 }
             });
 
@@ -84,81 +85,81 @@
 
         var MemoryMatrix = MemoryMatrix || {};
 
-        MemoryMatrix.Store = function(){
+        MemoryMatrix.Store = function () {
             // Private
             var greenTileArray;
             var selectionArray = [];
 
             var showTileInitialDelay = 1;
-            var showTileDuration = 2 + Math.floor(currentLevel /2);
+            var showTileDuration = 2 + Math.floor(currentLevel / 2);
             var enableClick = false;
             var showMessageDuration = 3000;
 
             // Public
             return {
 
-                getGreenTileArray : function(){
+                getGreenTileArray: function () {
                     return greenTileArray;
                 },
-                setGreenTileArray : function(array){
+                setGreenTileArray: function (array) {
                     greenTileArray = array;
                 },
 
-                getSelectionArray : function(){
+                getSelectionArray: function () {
                     return selectionArray;
                 },
-                setSelectionArray : function(array){
+                setSelectionArray: function (array) {
                     selectionArray = array;
                 },
 
-                getShowTileInitialDelay : function(){
+                getShowTileInitialDelay: function () {
                     return showTileInitialDelay * 1000;
                 },
-                getShowTileDuration : function(){
+                getShowTileDuration: function () {
                     return (showTileInitialDelay + showTileDuration) * 1000;
                 },
 
-                getEnableClick : function(){
+                getEnableClick: function () {
                     return enableClick;
                 },
-                setEnableClick : function(value){
+                setEnableClick: function (value) {
                     enableClick = value;
                 },
 
-                getShowMessageDuration : function(){
+                getShowMessageDuration: function () {
                     return showMessageDuration;
                 },
-                setShowMessageDuration : function(value){
+                setShowMessageDuration: function (value) {
                     showMessageDuration = value;
                 }
             };
         }();
 
-        MemoryMatrix.Init = function(){
+        MemoryMatrix.Init = function () {
             // Private
-            var totalGreenTile = Math.floor(noOfTiles/2) + 1;
+            var totalGreenTile = Math.sqrt(noOfTiles) * 2 - 1;
 
             var getRandomInt = function (min, max) {
                 return Math.floor(Math.random() * (max - min)) + min;
             }
 
-            var calculateGreenTiles = function() {
+            var calculateGreenTiles = function () {
                 var greenTileArray = [];
                 while (greenTileArray.length != totalGreenTile) {
                     var randomInt = getRandomInt(0, noOfTiles);
-                    if(greenTileArray.indexOf(randomInt)== -1){
+                    if (greenTileArray.indexOf(randomInt) == -1) {
                         greenTileArray.push(randomInt);
                     }
                 }
                 MemoryMatrix.Store.setGreenTileArray(greenTileArray);
             };
 
-            var addGreenTiles = function() {
-                $('.tile-container').each(function(index,val){
+            var addGreenTiles = function () {
+                $('.tile-container').each(function (index, val) {
                     var self = $(this);
                     var tileNumber = parseInt(self.attr('data-tilenumber'));
                     var greenTileArray = MemoryMatrix.Store.getGreenTileArray();
-                    if(greenTileArray.indexOf(tileNumber)!=-1){
+                    if (greenTileArray.indexOf(tileNumber) != -1) {
                         self.addClass('hasRt');
                         self.find('.back').removeClass('red-tile').addClass('green-tile');
                     }
@@ -167,19 +168,19 @@
 
             // Public
             return {
-                arrangeTiles : function(){
+                arrangeTiles: function () {
                     calculateGreenTiles();
                     addGreenTiles();
                 },
 
-                showTiles : function() {
+                showTiles: function () {
                     // Initial delay before showing tiles.
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $('.hasRt').flip(true);
                     }, MemoryMatrix.Store.getShowTileInitialDelay());
 
                     // Hide tiles again.
-                    setTimeout(function() {
+                    setTimeout(function () {
                         $('.hasRt').flip(false);
                         // Enable clicking on matrix.
                         MemoryMatrix.Store.setEnableClick(true);
@@ -188,32 +189,37 @@
             };
         }();
 
-        MemoryMatrix.Game = function(){
+        MemoryMatrix.Game = function () {
             // Private
-            var changeLevel = function(level) {
-                
+            var changeLevel = function (level) {
+
                 $.ajax({
-                    type:'POST',
-                    data: {'level':level},
+                    type: 'POST',
+                    data: { 'level': level },
                     //contentType: "application/json; charset=utf-8",
                     //dataType:'json',
-                    url:'@Url.Action("ChangeLevel","Home")',
-                    success : function(){
+                    url: '@Url.Action("ChangeLevel","Home")',
+                    success: function () {
                         location.reload();
                     }
                 });
-            }
+            };
+
+            var showAllTiles = function() {
+
+            };
 
             // Public
             return {
-                CheckCorrectPattern : function(selectedTileId) {
-                    var selectedTile = $('#'+selectedTileId);
+                CheckCorrectPattern: function (selectedTileId) {
+                    var selectedTile = $('#' + selectedTileId);
                     // Wrong answer
-                    if(selectedTile.find('.green-tile').length == 0){
+                    if (selectedTile.find('.green-tile').length == 0) {
                         MemoryMatrix.Store.setEnableClick(false);
                         MemoryMatrix.Game.ShowMessage('Wrong selection!!!', true);
-                        MemoryMatrix.Game.ShowModal('Game Over','You have played till '+currentLevel+ ' Level, well played!!!');
+                        MemoryMatrix.Game.ShowModal('Game Over', 'You have played till Level ' + currentLevel + ', well played!!!');
                         MemoryMatrix.Store.setEnableClick(false);
+
                     }
                     else {
                         var selectionArray = MemoryMatrix.Store.getSelectionArray();
@@ -221,10 +227,10 @@
                         var tileNumber = parseInt(selectedTile.attr('data-tilenumber'));
                         selectionArray.push(tileNumber);
 
-                        if(selectionArray.length >= totalGreenTiles){
-                            MemoryMatrix.Game.ShowMessage('Level '+currentLevel+' completed',false);
+                        if (selectionArray.length >= totalGreenTiles) {
+                            MemoryMatrix.Game.ShowMessage('Level ' + currentLevel + ' completed', false);
                             MemoryMatrix.Store.setEnableClick(false);
-                            setTimeout(function(){changeLevel(currentLevel + 1);},MemoryMatrix.Store.getShowMessageDuration());
+                            setTimeout(function () { changeLevel(currentLevel + 1); }, MemoryMatrix.Store.getShowMessageDuration());
                         }
                         else {
                             MemoryMatrix.Store.setSelectionArray(selectionArray);
@@ -232,19 +238,19 @@
                     }
                 },
 
-                ShowMessage : function(message, isFailure) {
+                ShowMessage: function (message, isFailure) {
                     var msgSpan = $('#message');
                     msgSpan.text(message);
-                    if(isFailure)
+                    if (isFailure)
                         msgSpan.addClass('failure-message');
                     else
                         msgSpan.addClass('success-message');
-                    
+
                     msgSpan.fadeIn(1000);
-                    setTimeout(MemoryMatrix.Game.HideMessage,MemoryMatrix.Store.getShowMessageDuration());
+                    setTimeout(MemoryMatrix.Game.HideMessage, MemoryMatrix.Store.getShowMessageDuration());
                 },
 
-                HideMessage : function() {
+                HideMessage: function () {
                     var msgSpan = $('#message');
                     msgSpan.fadeOut(1000);
                     //msgSpan.text('');
@@ -252,7 +258,7 @@
                     msgSpan.removeClass('success-message');
                 },
 
-                ShowModal : function(title, message){
+                ShowModal: function (title, message) {
                     $('#modal-title').text(title);
                     $('#modal-message').text(message);
                     $('#message-modal').modal('show');
