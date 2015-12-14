@@ -9,6 +9,7 @@
     <link href="~/Content/Site.css" rel="stylesheet" />
     <link href="~/Content/Bootstrap/bootstrap.min.css" rel="stylesheet" />
 }
+
 <!-- Bootstrap modal -->
 <div id="message-modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
@@ -218,6 +219,7 @@
                         MemoryMatrix.Store.setEnableClick(false);
                         MemoryMatrix.Game.ShowMessage('Wrong selection!!!', true);
                         MemoryMatrix.Game.ShowModal('Game Over', 'You have played till Level ' + currentLevel + ', well played!!!');
+                        $('.tile-container').flip(true);
                         MemoryMatrix.Store.setEnableClick(false);
 
                     }
