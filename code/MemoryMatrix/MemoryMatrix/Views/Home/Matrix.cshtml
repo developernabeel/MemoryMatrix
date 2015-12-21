@@ -6,8 +6,7 @@
     Matrix matrix = ViewBag.matrix;
 }
 @section Head{
-    <link href="~/Content/Site.css" rel="stylesheet" />
-    <link href="~/Content/Bootstrap/bootstrap.min.css" rel="stylesheet" />
+    
 }
 
 <!-- Bootstrap modal -->
@@ -29,25 +28,40 @@
 </div><!-- /.modal -->
 <!-- End Bootstrap modal -->
 
-<h2>Memory Matrix</h2>
-@Html.ActionLink("Menu", "Index", "Home")
-<div class="center">
-    <h4>Level : @gameSession.Level</h4>
-    <div id="matrix-div" class="matrix" style="width:@(matrix.Width)px;height:@(matrix.Height)px">
-        @for (int i = 0; i < matrix.NoOfTiles; i++)
-        {
-            <div class="tile-container clickable" id="container-@(i+1)" data-tilenumber="@i" style="width:@(matrix.CellWidth)px;height:@(matrix.CellHeight)px">
-                <div class="front white-tile">
-                    <!-- front content -->
-                </div>
-                <div class="back red-tile">
-                    <!-- back content -->
-                </div>
-            </div>
-        }
+<div class="row">
+    <div class="col-md-3">
+        <table class="table">
+            <tbody>
+                <tr>
+                    <td><h2>Memory Matrix</h2></td>
+                </tr>
+                <tr>
+                    <td><a class="btn btn-default btn-lg btn-block" href="@Url.Action("Index", "Home")" role="button">Main Menu</a></td>
+                    
+                </tr>
+            </tbody>
+        </table>
     </div>
-    <div class="message-container">
-        <span id="message" style="display:none"></span>
+    <div class="col-md-6">
+        <div style="margin-top:39px;">
+            <h4>Level : @gameSession.Level</h4>
+        </div>
+        <div id="matrix-div" class="matrix" style="width:@(matrix.Width)px;height:@(matrix.Height)px">
+            @for (int i = 0; i < matrix.NoOfTiles; i++)
+            {
+                <div class="tile-container clickable" id="container-@(i+1)" data-tilenumber="@i" style="width:@(matrix.CellWidth)px;height:@(matrix.CellHeight)px">
+                    <div class="front white-tile">
+                        <!-- front content -->
+                    </div>
+                    <div class="back red-tile">
+                        <!-- back content -->
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="message-container">
+            <span id="message" style="display:none"></span>
+        </div>
     </div>
 </div>
 @section scripts{

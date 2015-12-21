@@ -1,15 +1,20 @@
 ﻿<!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
     @Styles.Render("~/Content/css")
     @Scripts.Render("~/bundles/modernizr")
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/Bootstrap/bootstrap.min.css" rel="stylesheet" />
+
     @RenderSection("head", false)
 </head>
 <body>
-    @RenderBody()
+    <div class="container">
+        @RenderBody()
+    </div>
 
     @Scripts.Render("~/bundles/jquery")
     @RenderSection("scripts", required: false)
