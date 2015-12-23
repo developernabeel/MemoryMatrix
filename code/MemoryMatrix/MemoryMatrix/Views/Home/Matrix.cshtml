@@ -231,8 +231,12 @@
                     // Wrong answer
                     if (selectedTile.find('.green-tile').length == 0) {
                         MemoryMatrix.Store.setEnableClick(false);
-                        MemoryMatrix.Game.ShowMessage('Wrong selection!!!', true);
-                        MemoryMatrix.Game.ShowModal('Game Over', 'You have played till Level ' + currentLevel + ', well played!!!');
+                        var msg = 'Wrong selection!!!';
+                        MemoryMatrix.Game.ShowMessage(msg, true, function() {
+                            MemoryMatrix.Game.HideMessage();
+                            MemoryMatrix.Game.ShowModal('Game Over', 'You have played till Level ' + currentLevel + ', well played!!!');
+                        });
+
                         $('.tile-container').flip(true);
                         MemoryMatrix.Store.setEnableClick(false);
 
@@ -244,7 +248,10 @@
                         selectionArray.push(tileNumber);
 
                         if (selectionArray.length >= totalGreenTiles) {
-                            MemoryMatrix.Game.ShowMessage('Level ' + currentLevel + ' completed', false);
+                            var msg = 'Level ' + currentLevel + ' completed';
+                            MemoryMatrix.Game.ShowMessage(msg, false, function() {
+                                MemoryMatrix.Game.HideMessage();
+                            });
                             MemoryMatrix.Store.setEnableClick(false);
                             setTimeout(function () { changeLevel(currentLevel + 1); }, MemoryMatrix.Store.getShowMessageDuration());
                         }
@@ -254,7 +261,7 @@
                     }
                 },
 
-                ShowMessage: function (message, isFailure) {
+                ShowMessage: function (message, isFailure, callback) {
                     var msgSpan = $('#message');
                     msgSpan.text(message);
                     if (isFailure)
@@ -263,7 +270,8 @@
                         msgSpan.addClass('success-message');
 
                     msgSpan.fadeIn(1000);
-                    setTimeout(MemoryMatrix.Game.HideMessage, MemoryMatrix.Store.getShowMessageDuration());
+                    // Call callback function after message duration ended.
+                    setTimeout(callback, MemoryMatrix.Store.getShowMessageDuration());
                 },
 
                 HideMessage: function () {
