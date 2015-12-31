@@ -154,16 +154,128 @@
             // Private
             var totalGreenTile = Math.sqrt(noOfTiles) * 2 - 1;
 
+            // Calculates the positions of adjacent tiles around the tile of a given position.
+            var getAdjacentTiles = function(totalTiles, pos) {
+                var adjacentTile = {
+                    topLeft : null,
+                    top : null,
+                    topRight : null,
+                    left : null,
+                    right : null,
+                    bottomLeft : null,
+                    bottom : null,
+                    bottomRight : null
+                };
+
+                var sideLen = Math.sqrt(totalTiles);
+                var isOnTop, isFarLeft, isFarRight, isOnBottom;
+                isOnTop = isFarLeft = isFarRight = isOnBottom = false;
+                
+                // Check Top Line
+                if (pos < sideLen)
+                {
+                    // Cell is on top line, there will be no top adjacent cells.
+                    isOnTop = true;
+                }
+                    // Check Bottom Line
+                else if (pos >= (totalTiles - sideLen))
+                {
+                    // Cell is on bottom line, there will be no bottom adjacent cells.
+                    isOnBottom = true;
+                }
+
+                // Check far left
+                if ((sideLen + pos) % sideLen == 0)
+                {
+                    // Cell is on far left, there will be no left adjacent cells.
+                    isFarLeft = true;
+                }
+                    // Check far right
+                else if ((sideLen + pos) % sideLen == (sideLen - 1))
+                {
+                    // Cell is on far right, there will be no right adjacent cells.
+                    isFarRight = true;
+                }
+
+                // Calculate coordinates
+                // Top Layer
+                if (!isOnTop && !isFarLeft)
+                    adjacentTile.topLeft = pos - sideLen - 1;
+
+                if (!isOnTop)
+                    adjacentTile.top = pos - sideLen;
+
+                if (!isOnTop && !isFarRight)
+                    adjacentTile.topRight = pos - sideLen + 1;
+
+                // Middle Layer
+                if (!isFarLeft)
+                    adjacentTile.left = pos - 1;
+
+                if (!isFarRight)
+                    adjacentTile.right = pos + 1;
+
+                // Bottom Layer
+                if (!isOnBottom && !isFarLeft)
+                    adjacentTile.bottomLeft = pos + sideLen - 1;
+
+                if (!isOnBottom)
+                    adjacentTile.bottom = pos + sideLen;
+
+                if (!isOnBottom && !isFarRight)
+                    adjacentTile.bottomRight = pos + sideLen + 1;
+
+                return adjacentTile;
+            }
+
+            // Searches the green tiles array and returns if the given tile position is adjacent to any of the green tiles in array.
+            var isAdjacentToGreenTiles = function(greenTiles,totalTiles, pos) {
+                var adjacentTile = getAdjacentTiles(totalTiles, pos);
+                if (greenTiles.indexOf(adjacentTile.topLeft) != -1) {
+                    return true;
+                }
+                if (greenTiles.indexOf(adjacentTile.top) != -1) {
+                    return true;
+                }
+                if (greenTiles.indexOf(adjacentTile.topRight) != -1) {
+                    return true;
+                }
+                if (greenTiles.indexOf(adjacentTile.left) != -1) {
+                    return true;
+                }
+                if (greenTiles.indexOf(adjacentTile.right) != -1) {
+                    return true;
+                }
+                if (greenTiles.indexOf(adjacentTile.bottomLeft) != -1) {
+                    return true;
+                }
+                if (greenTiles.indexOf(adjacentTile.bottom) != -1) {
+                    return true;
+                }
+                if (greenTiles.indexOf(adjacentTile.bottomRight) != -1) {
+                    return true;
+                }
+                return false;
+            }
+
             var getRandomInt = function (min, max) {
                 return Math.floor(Math.random() * (max - min)) + min;
             }
 
+            // Algorithm for arranging tiles inside the matrix.
             var calculateGreenTiles = function () {
                 var greenTileArray = [];
                 while (greenTileArray.length != totalGreenTile) {
+                    // Calculates Random tile position.
                     var randomInt = getRandomInt(0, noOfTiles);
                     if (greenTileArray.indexOf(randomInt) == -1) {
-                        greenTileArray.push(randomInt);
+                        
+                        // If there is not tile inside greenTileArray, push the random tile
+                        if(greenTileArray.length == 0)
+                            greenTileArray.push(randomInt);
+                        // Else check if the position is adjacent to any other green tile, if yes; push it inside array.
+                        else if(isAdjacentToGreenTiles(greenTileArray, noOfTiles,randomInt))
+                            greenTileArray.push(randomInt);
                     }
                 }
                 MemoryMatrix.Store.setGreenTileArray(greenTileArray);
@@ -218,10 +330,6 @@
                         location.reload();
                     }
                 });
-            };
-
-            var showAllTiles = function() {
-
             };
 
             // Public
