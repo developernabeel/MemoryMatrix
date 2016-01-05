@@ -68,24 +68,26 @@
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/jquery.flip.min.js"></script>
     <script>
-        // Global variable
+        // Global variables
         var currentLevel = @gameSession.Level;
         var noOfTiles = @matrix.NoOfTiles;
 
         $(function () {
+            // Initialize flip function
             $(".tile-container").flip({
                 axis: "y", // y or x
                 trigger: "manual", // click or hover
                 speed: 400
             });
 
+            // Initialize Modal
             $('#message-modal').modal({
                 show: false,
                 keyboard: true
             });
 
             $('#matrix-div').on('click', '.clickable', function () {
-                if (MemoryMatrix.Store.getEnableClick()) {
+                if (MemoryMatrix.Store.getIsClickEnabled()) {
                     var self = $(this);
                     self.flip(true);
                     self.removeClass('clickable');
@@ -107,8 +109,25 @@
 
             var showTileInitialDelay = 1;
             var showTileDuration = 2 + Math.floor(currentLevel / 2);
-            var enableClick = false;
+            var isClickEnabled = false;
             var showMessageDuration = 3000;
+
+            var gameOverMessages = [
+                {
+                    level : 2,
+                    messages : [
+                        'Seriously? This is the easiest level and you failed in that?',
+                        'You have failed at level ##LEVEL##, Go home, you are drunk...'
+                    ]
+                },
+                {
+                    level : 10,
+                    messages : [
+                        'You are good, this level requires some good memory, way to go!!!',
+                        'You have made it till level ##LEVEL##, well played'
+                    ]
+                }
+            ]
 
             // Public
             return {
@@ -134,11 +153,11 @@
                     return (showTileInitialDelay + showTileDuration) * 1000;
                 },
 
-                getEnableClick: function () {
-                    return enableClick;
+                getIsClickEnabled: function () {
+                    return isClickEnabled;
                 },
-                setEnableClick: function (value) {
-                    enableClick = value;
+                setIsClickEnabled: function (value) {
+                    isClickEnabled = value;
                 },
 
                 getShowMessageDuration: function () {
@@ -146,6 +165,21 @@
                 },
                 setShowMessageDuration: function (value) {
                     showMessageDuration = value;
+                },
+
+                getGameOverMessage: function(level) {
+                    debugger;
+                    for(var i = 0; i < gameOverMessages.length; i++) {
+                        if(level < gameOverMessages[i].level) {
+                            var messageArray = gameOverMessages[i].messages;
+                            var min = 0;
+                            var max = messageArray.length;
+                            var random = Math.floor(Math.random() * (max - min)) + min;
+                            var message = messageArray[random];
+                            message = message.replace('##LEVEL##', level);
+                            return message;
+                        }
+                    }
                 }
             };
         }();
@@ -310,7 +344,7 @@
                     setTimeout(function () {
                         $('.hasRt').flip(false);
                         // Enable clicking on matrix.
-                        MemoryMatrix.Store.setEnableClick(true);
+                        MemoryMatrix.Store.setIsClickEnabled(true);
                     }, MemoryMatrix.Store.getShowTileDuration());
                 }
             };
@@ -319,12 +353,9 @@
         MemoryMatrix.Game = function () {
             // Private
             var changeLevel = function (level) {
-
                 $.ajax({
                     type: 'POST',
                     data: { 'level': level },
-                    //contentType: "application/json; charset=utf-8",
-                    //dataType:'json',
                     url: '@Url.Action("ChangeLevel","Home")',
                     success: function () {
                         location.reload();
@@ -332,22 +363,31 @@
                 });
             };
 
+            var clearSession = function() {
+                $.ajax({
+                    type: 'POST',
+                    url: '@Url.Action("ClearSession","Home")',
+                    success: function () { }
+                });
+            }
+
             // Public
             return {
                 CheckCorrectPattern: function (selectedTileId) {
                     var selectedTile = $('#' + selectedTileId);
                     // Wrong answer
                     if (selectedTile.find('.green-tile').length == 0) {
-                        MemoryMatrix.Store.setEnableClick(false);
-                        var msg = 'Wrong selection!!!';
-                        MemoryMatrix.Game.ShowMessage(msg, true, function() {
+                        MemoryMatrix.Store.setIsClickEnabled(false);
+                        // Clear session to reset the level
+                        clearSession();
+
+                        MemoryMatrix.Game.ShowMessage('Wrong selection!!!', true, function() {
                             MemoryMatrix.Game.HideMessage();
-                            MemoryMatrix.Game.ShowModal('Game Over', 'You have played till Level ' + currentLevel + ', well played!!!');
+                            var message = MemoryMatrix.Store.getGameOverMessage(currentLevel);
+                            MemoryMatrix.Game.ShowModal('Game Over', message);
                         });
 
                         $('.tile-container').flip(true);
-                        MemoryMatrix.Store.setEnableClick(false);
-
                     }
                     else {
                         var selectionArray = MemoryMatrix.Store.getSelectionArray();
@@ -360,7 +400,7 @@
                             MemoryMatrix.Game.ShowMessage(msg, false, function() {
                                 MemoryMatrix.Game.HideMessage();
                             });
-                            MemoryMatrix.Store.setEnableClick(false);
+                            MemoryMatrix.Store.setIsClickEnabled(false);
                             setTimeout(function () { changeLevel(currentLevel + 1); }, MemoryMatrix.Store.getShowMessageDuration());
                         }
                         else {

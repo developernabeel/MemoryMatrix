@@ -45,6 +45,13 @@ namespace MemoryMatrix.Controllers
             return Json(new { }, JsonRequestBehavior.AllowGet);
         }
 
+        [HttpPost]
+        public ActionResult ClearSession()
+        {
+            Session.Abandon();
+            return Json(new { }, JsonRequestBehavior.AllowGet);
+        }
+
         [NonAction]
         private Matrix CalculateMatrix(GameSession gameSession)
         {
