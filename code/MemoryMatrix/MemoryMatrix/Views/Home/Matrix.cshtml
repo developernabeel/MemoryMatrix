@@ -117,7 +117,30 @@
                     level : 2,
                     messages : [
                         'Seriously? This is the easiest level and you failed in that?',
-                        'You have failed at level ##LEVEL##, Go home, you are drunk...'
+                        'You have failed at level ##LEVEL##? Go home, you are drunk...',
+                        'You kidding me? even a 4 year old can solve this level!',
+                        'You have failed at level ##LEVEL##, Are you playing with your eyes closed?'
+                    ]
+                },                
+                {
+                    level : 4,
+                    messages : [
+                        'Well this is embarrassing! This level is not that hard',
+                        'Haha! You failed at level ##LEVEL##, Thats a shame!'
+                    ]
+                },                
+                {
+                    level : 6,
+                    messages : [
+                        'The difficulty has just started, try to do it better',
+                        'Try to improve your memory, try again'
+                    ]
+                },                
+                {
+                    level : 8,
+                    messages : [
+                        'Better luck next time!!!',
+                        'You made it till level ##LEVEL##, it was fun, wasn\'t it?'
                     ]
                 },
                 {
@@ -125,6 +148,12 @@
                     messages : [
                         'You are good, this level requires some good memory, way to go!!!',
                         'You have made it till level ##LEVEL##, well played'
+                    ]
+                },
+                {
+                    level : 20,
+                    messages : [
+                        'You are either a genius or a cheater, anyway.. well played'
                     ]
                 }
             ]
@@ -168,9 +197,8 @@
                 },
 
                 getGameOverMessage: function(level) {
-                    debugger;
                     for(var i = 0; i < gameOverMessages.length; i++) {
-                        if(level < gameOverMessages[i].level) {
+                        if(level <= gameOverMessages[i].level) {
                             var messageArray = gameOverMessages[i].messages;
                             var min = 0;
                             var max = messageArray.length;
