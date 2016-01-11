@@ -70,6 +70,7 @@
     <script>
         // Global variables
         var currentLevel = @gameSession.Level;
+        var gameMode = '@gameSession.Mode';
         var noOfTiles = @matrix.NoOfTiles;
 
         $(function () {
@@ -126,14 +127,16 @@
                     level : 4,
                     messages : [
                         'Well this is embarrassing! This level is not that hard',
-                        'Haha! You failed at level ##LEVEL##, Thats a shame!'
+                        'Haha! You failed at level ##LEVEL##, Thats a shame!',
+                        'No way! How can you fail at this level, try to use your brain...'
                     ]
                 },                
                 {
                     level : 6,
                     messages : [
                         'The difficulty has just started, try to do it better',
-                        'Try to improve your memory, try again'
+                        'Try to improve your memory, try again',
+                        'You can do better, use your head...'
                     ]
                 },                
                 {
@@ -144,9 +147,9 @@
                     ]
                 },
                 {
-                    level : 10,
+                    level : 12,
                     messages : [
-                        'You are good, this level requires some good memory, way to go!!!',
+                        'Well played, this level requires some good memory, way to go!!!',
                         'You have made it till level ##LEVEL##, well played'
                     ]
                 },
@@ -404,16 +407,24 @@
                 CheckCorrectPattern: function (selectedTileId) {
                     var selectedTile = $('#' + selectedTileId);
                     // Wrong answer
-                    if (selectedTile.find('.green-tile').length == 0) {
+                    if (selectedTile.find('.green-tile').length == 90) {
                         MemoryMatrix.Store.setIsClickEnabled(false);
-                        // Clear session to reset the level
-                        clearSession();
-
-                        MemoryMatrix.Game.ShowMessage('Wrong selection!!!', true, function() {
-                            MemoryMatrix.Game.HideMessage();
-                            var message = MemoryMatrix.Store.getGameOverMessage(currentLevel);
-                            MemoryMatrix.Game.ShowModal('Game Over', message);
-                        });
+                        
+                        if (gameMode == 'c') {
+                            // Challenge mode, clear session to reset the level.
+                            clearSession();
+                            MemoryMatrix.Game.ShowMessage('Wrong selection!!!', true, function() {
+                                MemoryMatrix.Game.HideMessage();
+                                var message = MemoryMatrix.Store.getGameOverMessage(currentLevel);
+                                MemoryMatrix.Game.ShowModal('Game Over', message);
+                            });
+                        }
+                        else {
+                            MemoryMatrix.Game.ShowMessage('Wrong selection, Try again', true, function() {
+                                MemoryMatrix.Game.HideMessage();
+                                window.location.reload();
+                            });
+                        }
 
                         $('.tile-container').flip(true);
                     }
@@ -424,12 +435,24 @@
                         selectionArray.push(tileNumber);
 
                         if (selectionArray.length >= totalGreenTiles) {
-                            var msg = 'Level ' + currentLevel + ' completed';
-                            MemoryMatrix.Game.ShowMessage(msg, false, function() {
-                                MemoryMatrix.Game.HideMessage();
-                            });
+
                             MemoryMatrix.Store.setIsClickEnabled(false);
-                            setTimeout(function () { changeLevel(currentLevel + 1); }, MemoryMatrix.Store.getShowMessageDuration());
+                            var msg = 'Level ' + currentLevel + ' completed';
+
+                            if (currentLevel < 20) {
+                                MemoryMatrix.Game.ShowMessage(msg, false, function() {
+                                    MemoryMatrix.Game.HideMessage();
+                                });
+                                setTimeout(function () { changeLevel(currentLevel + 1); }, MemoryMatrix.Store.getShowMessageDuration());
+                            }
+                            else {
+                                // All levels have finished
+                                clearSession();
+                                MemoryMatrix.Game.ShowMessage(msg, false, function() {
+                                    MemoryMatrix.Game.HideMessage();
+                                    MemoryMatrix.Game.ShowModal('All Levels finish', 'Cool...You have finished all the levels, the beer is in the fridge ;)');
+                                });
+                            }
                         }
                         else {
                             MemoryMatrix.Store.setSelectionArray(selectionArray);
