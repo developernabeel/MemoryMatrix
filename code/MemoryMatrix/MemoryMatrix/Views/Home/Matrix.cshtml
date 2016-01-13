@@ -21,6 +21,9 @@
                 <p id="modal-message"></p>
             </div>
             <div class="modal-footer">
+                <p id="modal-prac-link" style=" float: left; font-size: 13px;">
+                    <a href="@Url.Action("Matrix", "Home", new { mode = "p" }, "")">Having Difficulty? Try Practice Mode</a>
+                </p>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
         </div><!-- /.modal-content -->
@@ -407,7 +410,7 @@
                 CheckCorrectPattern: function (selectedTileId) {
                     var selectedTile = $('#' + selectedTileId);
                     // Wrong answer
-                    if (selectedTile.find('.green-tile').length == 90) {
+                    if (selectedTile.find('.green-tile').length == 0) {
                         MemoryMatrix.Store.setIsClickEnabled(false);
                         
                         if (gameMode == 'c') {
@@ -449,8 +452,9 @@
                                 // All levels have finished
                                 clearSession();
                                 MemoryMatrix.Game.ShowMessage(msg, false, function() {
+                                    $('#modal-prac-link').hide();
                                     MemoryMatrix.Game.HideMessage();
-                                    MemoryMatrix.Game.ShowModal('All Levels finish', 'Cool...You have finished all the levels, the beer is in the fridge ;)');
+                                    MemoryMatrix.Game.ShowModal('All Levels finished', 'Cool...You have finished all the levels, the beer is in the fridge ;)');
                                 });
                             }
                         }

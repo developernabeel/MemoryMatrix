@@ -24,7 +24,7 @@ namespace MemoryMatrix.Controllers
             GameSession gameSession;
 
             string mode = "c";
-            if (Request.QueryString["mode"].IsStringInSet(new[] { "m" }))
+            if (Request.QueryString["mode"].IsStringInSet(new[] { "p" }))
             {
                 mode = Request.QueryString["mode"];
             }
