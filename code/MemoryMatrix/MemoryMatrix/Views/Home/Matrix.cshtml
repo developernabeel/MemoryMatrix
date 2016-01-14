@@ -9,7 +9,7 @@
     
 }
 
-<!-- Bootstrap modal -->
+<!-- Bootstrap message modal -->
 <div id="message-modal" class="modal fade" tabindex="-1" role="dialog">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -25,6 +25,28 @@
                     <a href="@Url.Action("Matrix", "Home", new { mode = "p" }, "")">Having Difficulty? Try Practice Mode</a>
                 </p>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+            </div>
+        </div><!-- /.modal-content -->
+    </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+<!-- End Bootstrap modal -->
+
+<!-- Bootstrap tutorial modal -->
+<div id="tutorial-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h4 class="modal-title">Overview</h4>
+            </div>
+            <div class="modal-body">
+                <img src="~/Content/images/tutorial_matrix.png" width="200" height="200"/>
+                <p>
+                    At the beginning of each level, green tiles will be shown for some seconds and will be flipped back, 
+                    you have to guess under which tile there is a green tile, find out all the green tiles to complete the level.
+                </p>
+            </div>
+            <div class="modal-footer">                
+                <button id="btn-close-tutorial" type="button" class="btn btn-default" data-dismiss="modal">Got it</button>
             </div>
         </div><!-- /.modal-content -->
     </div><!-- /.modal-dialog -->
@@ -90,6 +112,11 @@
                 keyboard: true
             });
 
+            $('#tutorial-modal').modal({
+                show: false,
+                keyboard: false
+            });
+
             $('#matrix-div').on('click', '.clickable', function () {
                 if (MemoryMatrix.Store.getIsClickEnabled()) {
                     var self = $(this);
@@ -100,8 +127,14 @@
                 }
             });
 
+            $('#btn-close-tutorial').on('click',function() {
+                setTimeout(function(){
+                    MemoryMatrix.Init.showTiles();
+                }, 1000);
+            })
+
             MemoryMatrix.Init.arrangeTiles();
-            MemoryMatrix.Init.showTiles();
+            MemoryMatrix.Init.showTutorial(MemoryMatrix.Init.showTiles);
         });
 
         var MemoryMatrix = MemoryMatrix || {};
@@ -361,6 +394,27 @@
                 });
             };
 
+            var createCookie = function(name,value,days) {
+                if (days) {
+                    var date = new Date();
+                    date.setTime(date.getTime()+(days*24*60*60*1000));
+                    var expires = "; expires="+date.toGMTString();
+                }
+                else var expires = "";
+                document.cookie = name+"="+value+expires+"; path=/";
+            };
+
+            var readCookie = function(name) {
+                var nameEQ = name + "=";
+                var ca = document.cookie.split(';');
+                for(var i=0;i < ca.length;i++) {
+                    var c = ca[i];
+                    while (c.charAt(0)==' ') c = c.substring(1,c.length);
+                    if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+                }
+                return null;
+            };
+
             // Public
             return {
                 arrangeTiles: function () {
@@ -380,6 +434,17 @@
                         // Enable clicking on matrix.
                         MemoryMatrix.Store.setIsClickEnabled(true);
                     }, MemoryMatrix.Store.getShowTileDuration());
+                },
+
+                showTutorial: function (callback) {
+                    var isTutorialShown = readCookie('mm_tutorial_shown');
+                    if(isTutorialShown === null || isTutorialShown === false) {
+                        $('#tutorial-modal').modal('show');
+                        createCookie('mm_tutorial_shown', true, 30);
+                    }
+                    else {
+                        callback();
+                    }
                 }
             };
         }();
