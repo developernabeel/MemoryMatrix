@@ -38,12 +38,19 @@
             <div class="modal-header">
                 <h4 class="modal-title">Overview</h4>
             </div>
-            <div class="modal-body">
-                <img src="~/Content/images/tutorial_matrix.png" width="200" height="200"/>
-                <p>
-                    At the beginning of each level, green tiles will be shown for some seconds and will be flipped back, 
-                    you have to guess under which tile there is a green tile, find out all the green tiles to complete the level.
-                </p>
+            <div class="modal-body col-md-12">
+                <div class="col-md-6">
+                    <img src="~/Content/images/tutorial_matrix1.png" class="tutorial-image-center" width="200" height="200" />
+                    <div style="margin-top: 10px; padding-left: 12px;">
+                        <p>At the beginning of each level, green tiles will be shown for some seconds and will be flipped back.</p>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <img src="~/Content/images/tutorial_matrix2.png" class="tutorial-image-center" width="200" height="200" />
+                    <div style="margin-top: 10px; padding-left: 12px;">
+                        <p>You have to guess all the green tiles correctly, Try not to flip the red tiles else level will be failed.</p>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">                
                 <button id="btn-close-tutorial" type="button" class="btn btn-default" data-dismiss="modal">Got it</button>
@@ -114,7 +121,8 @@
 
             $('#tutorial-modal').modal({
                 show: false,
-                keyboard: false
+                keyboard: false,
+                backdrop: 'static' // Can be closed from button only
             });
 
             $('#matrix-div').on('click', '.clickable', function () {
