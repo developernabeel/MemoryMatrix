@@ -141,3 +141,26 @@ span#message {
     margin-right: auto;
     margin: 0 auto;
 }
+
+/* Scoreboard style
+-----------------------------------------------------------*/
+
+.scoreboard {
+    border: 1px solid grey;
+    -ms-border-radius: 10px;
+    border-radius: 10px; 
+    margin-top: 27%; 
+    padding: 20px; 
+    width: 150px; 
+    margin-left: -20px; 
+    vertical-align: middle;
+}
+
+.scoreboard-row {
+    text-align: center; 
+    vertical-align: middle;
+}
+
+.wd105px {
+    width: 105px;
+}

@@ -6,7 +6,7 @@
     Matrix matrix = ViewBag.matrix;
 }
 @section Head{
-    
+
 }
 
 <!-- Bootstrap message modal -->
@@ -21,14 +21,17 @@
                 <p id="modal-message"></p>
             </div>
             <div class="modal-footer">
-                <p id="modal-prac-link" style=" float: left; font-size: 13px;">
+                <p id="modal-prac-link" style="float: left; font-size: 13px;">
                     <a href="@Url.Action("Matrix", "Home", new { mode = "p" }, "")">Having Difficulty? Try Practice Mode</a>
                 </p>
                 <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 <!-- End Bootstrap modal -->
 
 <!-- Bootstrap tutorial modal -->
@@ -40,48 +43,57 @@
             </div>
             <div class="modal-body col-md-12">
                 <div class="col-md-6">
-                    <img src="~/Content/images/tutorial_matrix1.png" class="tutorial-image-center" width="200" height="200" />
+                    <img src="~/Content/images/tutorial_img_1.png" class="tutorial-image-center" width="200" height="200" />
                     <div style="margin-top: 10px; padding-left: 12px;">
                         <p>At the beginning of each level, green tiles will be shown for some seconds and will be flipped back.</p>
                     </div>
                 </div>
                 <div class="col-md-6">
-                    <img src="~/Content/images/tutorial_matrix2.png" class="tutorial-image-center" width="200" height="200" />
+                    <img src="~/Content/images/tutorial_img_2.png" class="tutorial-image-center" width="200" height="200" />
                     <div style="margin-top: 10px; padding-left: 12px;">
                         <p>You have to guess all the green tiles correctly, Try not to flip the red tiles else level will be failed.</p>
                     </div>
                 </div>
             </div>
-            <div class="modal-footer">                
+            <div class="modal-footer">
                 <button id="btn-close-tutorial" type="button" class="btn btn-default" data-dismiss="modal">Got it</button>
             </div>
-        </div><!-- /.modal-content -->
-    </div><!-- /.modal-dialog -->
-</div><!-- /.modal -->
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
 <!-- End Bootstrap modal -->
 
+<!-- Page Content -->
 <div class="row">
+    <!-- Left Column -->
     <div class="col-md-3">
         <table class="table">
             <tbody>
                 <tr>
-                    <td><h2>Memory Matrix</h2></td>
+                    <td>
+                        <h2>Memory Matrix</h2>
+                    </td>
                 </tr>
                 <tr>
                     <td><a class="btn btn-default btn-lg btn-block" href="@Url.Action("Index", "Home")" role="button">Main Menu</a></td>
-                    
+
                 </tr>
             </tbody>
         </table>
     </div>
+
+    <!-- Center Column -->
     <div class="col-md-6">
-        <div style="margin-top:39px;">
+        <div style="margin-top: 39px;">
             <h4>Level : @gameSession.Level</h4>
         </div>
         <div id="matrix-div" class="matrix" style="width:@(matrix.Width)px;height:@(matrix.Height)px">
             @for (int i = 0; i < matrix.NoOfTiles; i++)
             {
-                <div class="tile-container clickable" id="container-@(i+1)" data-tilenumber="@i" style="width:@(matrix.CellWidth)px;height:@(matrix.CellHeight)px">
+                <div class="tile-container clickable" id="container-@(i + 1)" data-tilenumber="@i" style="width:@(matrix.CellWidth)px;height:@(matrix.CellHeight)px">
                     <div class="front white-tile">
                         <!-- front content -->
                     </div>
@@ -92,10 +104,33 @@
             }
         </div>
         <div class="message-container">
-            <span id="message" style="display:none"></span>
+            <span id="message" style="display: none"></span>
+        </div>
+    </div>
+
+    <!-- Right Column -->
+    <div class="col-md-3">
+        <div class="scoreboard">
+            <table>
+                <tbody>
+                    <tr>
+                        <td class="scoreboard-row" style="padding-bottom: 15px;">
+                            <h1 id="scoreboard-flipped" class="wd105px"></h1>
+                            <h4 class="wd105px">Flipped Tiles</h4>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td class="scoreboard-row" style="border-top: 1px solid #ddd;">
+                            <h1 id="scoreboard-green" class="wd105px"></h1>
+                            <h4 class="wd105px">Green Tiles</h4>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
     </div>
 </div>
+
 @section scripts{
     <script src="~/Scripts/bootstrap.min.js"></script>
     <script src="~/Scripts/jquery.flip.min.js"></script>
@@ -110,10 +145,10 @@
             $(".tile-container").flip({
                 axis: "y", // y or x
                 trigger: "manual", // click or hover
-                speed: 400
+                speed: 300
             });
 
-            // Initialize Modal
+            // Initialize Modals
             $('#message-modal').modal({
                 show: false,
                 keyboard: true
@@ -131,18 +166,19 @@
                     self.flip(true);
                     self.removeClass('clickable');
                     var id = self.attr('id');
-                    setTimeout(function() { MemoryMatrix.Game.CheckCorrectPattern(id); }, 400);
+                    setTimeout(function() { MemoryMatrix.Game.checkCorrectPattern(id); }, 300);
                 }
             });
 
-            $('#btn-close-tutorial').on('click',function() {
-                setTimeout(function(){
+            $('#btn-close-tutorial').on('click', function() {
+                setTimeout(function() {
                     MemoryMatrix.Init.showTiles();
                 }, 1000);
-            })
+            });
 
             MemoryMatrix.Init.arrangeTiles();
             MemoryMatrix.Init.showTutorial(MemoryMatrix.Init.showTiles);
+            MemoryMatrix.Game.updateScoreBoard();
         });
 
         var MemoryMatrix = MemoryMatrix || {};
@@ -159,51 +195,51 @@
 
             var gameOverMessages = [
                 {
-                    level : 2,
-                    messages : [
+                    level: 2,
+                    messages: [
                         'Seriously? This is the easiest level and you failed in that?',
                         'You have failed at level ##LEVEL##? Go home, you are drunk...',
                         'You kidding me? even a 4 year old can solve this level!',
                         'You have failed at level ##LEVEL##, Are you playing with your eyes closed?'
                     ]
-                },                
+                },
                 {
-                    level : 4,
-                    messages : [
+                    level: 4,
+                    messages: [
                         'Well this is embarrassing! This level is not that hard',
                         'Haha! You failed at level ##LEVEL##, Thats a shame!',
                         'No way! How can you fail at this level, try to use your brain...'
                     ]
-                },                
+                },
                 {
-                    level : 6,
-                    messages : [
+                    level: 6,
+                    messages: [
                         'The difficulty has just started, try to do it better',
                         'Try to improve your memory, try again',
                         'You can do better, use your head...'
                     ]
-                },                
+                },
                 {
-                    level : 8,
-                    messages : [
+                    level: 8,
+                    messages: [
                         'Better luck next time!!!',
                         'You made it till level ##LEVEL##, it was fun, wasn\'t it?'
                     ]
                 },
                 {
-                    level : 12,
-                    messages : [
+                    level: 12,
+                    messages: [
                         'Well played, this level requires some good memory, way to go!!!',
                         'You have made it till level ##LEVEL##, well played'
                     ]
                 },
                 {
-                    level : 20,
-                    messages : [
+                    level: 20,
+                    messages: [
                         'You are either a genius or a cheater, anyway.. well played'
                     ]
                 }
-            ]
+            ];
 
             // Public
             return {
@@ -382,7 +418,7 @@
                         // If there is not tile inside greenTileArray, push the random tile
                         if(greenTileArray.length == 0)
                             greenTileArray.push(randomInt);
-                        // Else check if the position is adjacent to any other green tile, if yes; push it inside array.
+                            // Else check if the position is adjacent to any other green tile, if yes; push it inside array.
                         else if(isAdjacentToGreenTiles(greenTileArray, noOfTiles,randomInt))
                             greenTileArray.push(randomInt);
                     }
@@ -391,7 +427,7 @@
             };
 
             var addGreenTiles = function () {
-                $('.tile-container').each(function (index, val) {
+                $('.tile-container').each(function () {
                     var self = $(this);
                     var tileNumber = parseInt(self.attr('data-tilenumber'));
                     var greenTileArray = MemoryMatrix.Store.getGreenTileArray();
@@ -463,7 +499,7 @@
                 $.ajax({
                     type: 'POST',
                     data: { 'level': level },
-                    url: '@Url.Action("ChangeLevel","Home")',
+                    url: '@Url.Action("ChangeLevel", "Home")',
                     success: function () {
                         location.reload();
                     }
@@ -473,14 +509,14 @@
             var clearSession = function() {
                 $.ajax({
                     type: 'POST',
-                    url: '@Url.Action("ClearSession","Home")',
+                    url: '@Url.Action("ClearSession", "Home")',
                     success: function () { }
                 });
             }
 
             // Public
             return {
-                CheckCorrectPattern: function (selectedTileId) {
+                checkCorrectPattern: function (selectedTileId) {
                     var selectedTile = $('#' + selectedTileId);
                     // Wrong answer
                     if (selectedTile.find('.green-tile').length == 0) {
@@ -489,15 +525,16 @@
                         if (gameMode == 'c') {
                             // Challenge mode, clear session to reset the level.
                             clearSession();
-                            MemoryMatrix.Game.ShowMessage('Wrong selection!!!', true, function() {
-                                MemoryMatrix.Game.HideMessage();
+                            MemoryMatrix.Game.showMessage('Wrong selection!!!', true, function() {
+                                MemoryMatrix.Game.hideMessage();
                                 var message = MemoryMatrix.Store.getGameOverMessage(currentLevel);
-                                MemoryMatrix.Game.ShowModal('Game Over', message);
+                                MemoryMatrix.Game.showModal('Game Over', message);
                             });
                         }
                         else {
-                            MemoryMatrix.Game.ShowMessage('Wrong selection, Try again', true, function() {
-                                MemoryMatrix.Game.HideMessage();
+                            // Practice mode, reload current level again.
+                            MemoryMatrix.Game.showMessage('Wrong selection, Try again', true, function() {
+                                MemoryMatrix.Game.hideMessage();
                                 window.location.reload();
                             });
                         }
@@ -511,33 +548,34 @@
                         selectionArray.push(tileNumber);
 
                         if (selectionArray.length >= totalGreenTiles) {
-
+                            // All green tiles flipped.
                             MemoryMatrix.Store.setIsClickEnabled(false);
                             var msg = 'Level ' + currentLevel + ' completed';
 
                             if (currentLevel < 20) {
-                                MemoryMatrix.Game.ShowMessage(msg, false, function() {
-                                    MemoryMatrix.Game.HideMessage();
+                                MemoryMatrix.Game.showMessage(msg, false, function() {
+                                    MemoryMatrix.Game.hideMessage();
                                 });
                                 setTimeout(function () { changeLevel(currentLevel + 1); }, MemoryMatrix.Store.getShowMessageDuration());
                             }
                             else {
-                                // All levels have finished
+                                // All levels have finished, clear the session.
                                 clearSession();
-                                MemoryMatrix.Game.ShowMessage(msg, false, function() {
+                                MemoryMatrix.Game.showMessage(msg, false, function() {
                                     $('#modal-prac-link').hide();
-                                    MemoryMatrix.Game.HideMessage();
-                                    MemoryMatrix.Game.ShowModal('All Levels finished', 'Cool...You have finished all the levels, the beer is in the fridge ;)');
+                                    MemoryMatrix.Game.hideMessage();
+                                    MemoryMatrix.Game.showModal('All Levels finished', 'Cool...You have finished all the levels, the beer is in the fridge ;)');
                                 });
                             }
                         }
                         else {
                             MemoryMatrix.Store.setSelectionArray(selectionArray);
                         }
+                        MemoryMatrix.Game.updateScoreBoard();
                     }
                 },
 
-                ShowMessage: function (message, isFailure, callback) {
+                showMessage: function (message, isFailure, callback) {
                     var msgSpan = $('#message');
                     msgSpan.text(message);
                     if (isFailure)
@@ -545,12 +583,12 @@
                     else
                         msgSpan.addClass('success-message');
 
-                    msgSpan.fadeIn(1000);
+                    msgSpan.fadeIn(500);
                     // Call callback function after message duration ended.
                     setTimeout(callback, MemoryMatrix.Store.getShowMessageDuration());
                 },
 
-                HideMessage: function () {
+                hideMessage: function () {
                     var msgSpan = $('#message');
                     msgSpan.fadeOut(1000);
                     //msgSpan.text('');
@@ -558,10 +596,17 @@
                     msgSpan.removeClass('success-message');
                 },
 
-                ShowModal: function (title, message) {
+                showModal: function (title, message) {
                     $('#modal-title').text(title);
                     $('#modal-message').text(message);
                     $('#message-modal').modal('show');
+                },
+
+                updateScoreBoard : function() {
+                    var flippedTiles = MemoryMatrix.Store.getSelectionArray().length;
+                    var greenTiles = MemoryMatrix.Store.getGreenTileArray().length;
+                    $('#scoreboard-flipped').text(flippedTiles);
+                    $('#scoreboard-green').text(greenTiles);
                 }
             };
         }();

@@ -30,3 +30,34 @@ D:\Nabeel Workspace\MyGithub\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\Sys
 D:\Nabeel Workspace\MyGithub\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\obj\Debug\MemoryMatrix.csprojResolveAssemblyReference.cache
 D:\Nabeel Workspace\MyGithub\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\obj\Debug\MemoryMatrix.dll
 D:\Nabeel Workspace\MyGithub\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\obj\Debug\MemoryMatrix.pdb
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\MemoryMatrix.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\MemoryMatrix.pdb
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\Antlr3.Runtime.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\EntityFramework.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\Microsoft.Web.Infrastructure.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\Microsoft.Web.Mvc.FixedDisplayModes.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\Newtonsoft.Json.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Net.Http.Formatting.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.Http.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.Http.WebHost.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.Mvc.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.Optimization.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.Providers.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.Razor.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.WebPages.Deployment.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.WebPages.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.WebPages.Razor.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\WebGrease.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\EntityFramework.xml
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\Newtonsoft.Json.xml
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Net.Http.Formatting.xml
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.Http.xml
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.Http.WebHost.xml
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.Mvc.xml
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.Razor.xml
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.WebPages.xml
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.WebPages.Deployment.xml
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\bin\System.Web.WebPages.Razor.xml
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\obj\Debug\MemoryMatrix.csprojResolveAssemblyReference.cache
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\obj\Debug\MemoryMatrix.dll
+D:\Workspace\Github\MemoryMatrix\code\MemoryMatrix\MemoryMatrix\obj\Debug\MemoryMatrix.pdb
