@@ -1,9 +1,119 @@
 ﻿@{
     ViewBag.Title = "Memory Matrix";
     Layout = "~/Views/Shared/_Layout.cshtml";
+    List<int> letterPositions = ViewBag.LetterPositions;
 }
 
-<h2>Memory Matrix</h2>
-<h3>Play</h3>
-<h4>@Html.ActionLink("Challenge Mode", "Matrix", "Home", new {mode = "c" }, "")</h4>
-<h4>@Html.ActionLink("Practice Mode", "Matrix", "Home", new { mode = "p" }, "")</h4>
+<!-- Bootstrap modal -->
+<div id="about-modal" class="modal fade" tabindex="-1" role="dialog">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">About</h4>
+            </div>
+            <div class="modal-body">
+                <P>
+                    Memory Matrix is a general puzzle game which helps you train your memory and attention by showing 
+                    a you a pattern of tiles on the screen for short amount of time which you have to 
+                    remember and figure out the correct pattern using your memory power.
+                </P>
+                <b>Developer : </b> Nabeel Bape
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+            </div>
+        </div>
+        <!-- /.modal-content -->
+    </div>
+    <!-- /.modal-dialog -->
+</div>
+<!-- /.modal -->
+
+<div class="row">
+    <div class="col-md-1"></div>
+    <div class="col-md-10">
+        <!-- Title Matrix -->
+        <div id="matrix-div" style="/*background-color: #e4e9ee;*/width:946px; height: 286px">
+            @{
+
+                int searchIndex = 0;
+                for (int i = 0; i < 559; i++)
+                {
+                    int id = i + 1;
+                    int index = letterPositions.IndexOf(id, searchIndex);
+                    searchIndex = index == -1 ? searchIndex : index;
+                    string hasLetter = index != -1 ? "has-letter" : "";
+                    <div class="tile-container clickable @hasLetter" style="border:none;width:20px;height:20px">
+                        <div class="front white-tile">
+                            <!-- front content -->
+                        </div>
+                        <div class="back red-tile">
+                            <!-- back content -->
+                        </div>
+                    </div>
+                }
+            }
+        </div>
+        <!-- End Title Matrix -->
+        <div class="row mt3" style="margin-left: -6%;">
+            <div class="col-md-4"></div>
+            <div id="main-menu" class="col-md-4" style="display:none">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td style="border-top: none; vertical-align: middle; text-align: center;">
+                                <h3>Play</h3>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="padding-top: 20px;">
+                                <a class="btn btn-default btn-lg btn-block home-btn-lg" href="@Url.Action("Matrix", "Home", new { mode = "c" })" role="button">Challenge Mode</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-top: none">
+                                <a class="btn btn-default btn-lg btn-block home-btn-lg" href="@Url.Action("Matrix", "Home", new { mode = "p" })" role="button">Practice Mode</a>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="border-top: none">
+                                <button id="btn-about" class="btn btn-default btn-lg btn-block home-btn-lg" role="button">About</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-1"></div>
+</div>
+
+@section scripts{
+    <script src="~/Scripts/bootstrap.min.js"></script>
+    <script src="~/Scripts/jquery.flip.min.js"></script>
+    <script>
+        $(function () {
+            // Initialize flip function
+            $(".has-letter").flip({
+                axis: "y", // y or x
+                trigger: "click", // click or hover
+                speed: 1000
+            });
+
+            $('#about-modal').modal({
+                show: false,
+                keyboard: true
+            });
+
+            $('#btn-about').on('click', function () {
+                $('#about-modal').modal('show');
+            });
+
+            setTimeout(function () {
+                $('.has-letter').flip(true);
+                $('#main-menu').fadeIn(500);
+            }, 100);
+        });
+    </script>
+}
