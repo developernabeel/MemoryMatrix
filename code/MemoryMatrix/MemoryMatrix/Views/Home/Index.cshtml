@@ -13,15 +13,21 @@
                 <h4 class="modal-title">About</h4>
             </div>
             <div class="modal-body">
-                <P>
-                    Memory Matrix is a general puzzle game which helps you train your memory and attention by showing 
-                    a you a pattern of tiles on the screen for short amount of time which you have to 
-                    remember and figure out the correct pattern using your memory power.
-                </P>
-                <b>Developer : </b> Nabeel Bape
+                <p>
+                    Memory Matrix is a puzzle game which helps you train your memory and attention by showing 
+                    you a pattern of tiles on the screen for a short amount of time which you have to 
+                    remember correctly and figure out the correct pattern using your memory power.
+                </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Ok</button>
+                <div class="col-md-10" style="text-align: left; padding: 0;">
+                    <b>Developer : Nabeel Bape </b>
+                    <br>
+                    <a href="https://github.com/developernabeel/MemoryMatrix" target="blank">Find source on Github</a>
+                </div>
+                <div class="col-md-2" style="margin-top: 10px;">
+                    <button type="button" class="btn btn-block btn-default" data-dismiss="modal">Ok</button>
+                </div>
             </div>
         </div>
         <!-- /.modal-content -->
@@ -34,7 +40,7 @@
     <div class="col-md-1"></div>
     <div class="col-md-10">
         <!-- Title Matrix -->
-        <div id="matrix-div" style="/*background-color: #e4e9ee;*/width:946px; height: 286px">
+        <div id="matrix-div" style="/*background-color: #e4e9ee; */width: 946px; height: 286px">
             @{
 
                 int searchIndex = 0;
@@ -44,21 +50,21 @@
                     int index = letterPositions.IndexOf(id, searchIndex);
                     searchIndex = index == -1 ? searchIndex : index;
                     string hasLetter = index != -1 ? "has-letter" : "";
-                    <div class="tile-container clickable @hasLetter" style="border:none;width:20px;height:20px">
-                        <div class="front white-tile">
-                            <!-- front content -->
-                        </div>
-                        <div class="back red-tile">
-                            <!-- back content -->
-                        </div>
+                <div class="tile-container clickable @hasLetter" style="border:none;width:20px;height:20px">
+                    <div class="front white-tile">
+                        <!-- front content -->
                     </div>
+                    <div class="back red-tile">
+                        <!-- back content -->
+                    </div>
+                </div>
                 }
             }
         </div>
         <!-- End Title Matrix -->
         <div class="row mt3" style="margin-left: -6%;">
             <div class="col-md-4"></div>
-            <div id="main-menu" class="col-md-4" style="display:none">
+            <div id="main-menu" class="col-md-4" style="display: none">
                 <table class="table">
                     <tbody>
                         <tr>
